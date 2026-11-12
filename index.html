@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#100d20" />
+  <link rel="icon" href="data:," />
+  <title>Moonlit Coven — survive the night</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <canvas id="game" aria-label="Moonlit Coven game field"></canvas>
+    <div class="vignette"></div>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Moonlit Coven home"><span class="brand-mark">✦</span><span>MOONLIT <b>COVEN</b></span></a>
+      <div class="top-right"><span class="night-label"><i></i> NIGHTFALL</span><button id="soundBtn" class="icon-btn" aria-label="Toggle sound">♫</button><button id="pauseBtn" class="icon-btn pause-control" aria-label="Pause game">Ⅱ</button></div>
+    </header>
+    <section class="hud" id="hud" aria-live="polite">
+      <div class="hud-left">
+        <div class="portrait" id="hudPortrait">✦</div>
+        <div class="health-wrap"><div class="hud-label"><span id="heroName">LUNA</span><span><b id="hpText">100</b> <small>/ 100</small></span></div><div class="bar"><div id="healthBar" class="health-fill"></div></div></div>
+      </div>
+      <div class="hud-center"><div class="timer-label">SURVIVE THE NIGHT</div><div class="timer" id="timer">00:00</div></div>
+      <div class="hud-right"><div class="level-badge">LVL <b id="level">1</b></div><div class="kills"><span class="skull">✦</span><b id="kills">0</b><small> banished</small></div></div>
+      <div class="xp-track"><span id="xpFill"></span></div>
+    </section>
+    <div id="bossBar" class="boss-bar"><div class="boss-label">THE HOLLOW QUEEN <span>✦</span></div><div class="bar"><div id="bossFill"></div></div></div>
+    <div class="hint" id="hint"><span>WASD</span> move <i>·</i> auto-cast magic <i>·</i> collect moon shards</div>
+    <div class="mobile-pad" id="mobilePad" aria-label="Movement controls"><button data-dir="up">↑</button><button data-dir="left">←</button><button data-dir="down">↓</button><button data-dir="right">→</button></div>
+
+    <section class="screen welcome-screen active" id="welcome">
+      <div class="welcome-copy">
+        <div class="eyebrow"><span></span> A SURVIVOR-LIKE SPELLCRAFT ADVENTURE</div>
+        <h1>One night.<br><em>Endless shadows.</em></h1>
+        <p>They come for the moonlight. Give them a reason to fear the dark.</p>
+        <div class="character-pick">
+          <div class="pick-label">CHOOSE YOUR WITCH <span>01 — 03</span></div>
+          <div class="character-list">
+            <button class="character-card selected" data-hero="luna"><span class="mini-witch luna-mini">✦</span><span><b>Luna</b><small>Moon mage · balanced</small></span><i>✓</i></button>
+            <button class="character-card" data-hero="sakura"><span class="mini-witch sakura-mini">✿</span><span><b>Sakura</b><small>Crimson witch · swift</small></span><i>✓</i></button>
+            <button class="character-card" data-hero="yuki"><span class="mini-witch yuki-mini">❄</span><span><b>Yuki</b><small>Frost spirit · sturdy</small></span><i>✓</i></button>
+          </div>
+        </div>
+        <button id="startBtn" class="primary-btn">ENTER THE GARDEN <span>↗</span></button>
+        <div class="start-note"><span>⌨</span> WASD / ARROWS <i>·</i> <span>✧</span> AUTO-CAST</div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="moon-halo"></div><div class="moon"></div><div class="art-spark spark-one">✦</div><div class="art-spark spark-two">✧</div><div class="art-spark spark-three">✦</div><div class="art-witch"><div class="witch-hat"></div><div class="witch-hair"></div><div class="witch-face"><i></i><b></b><span></span></div><div class="witch-body"></div><div class="witch-cape"></div><div class="witch-book">✧</div></div><div class="art-caption"><span>THE LAST LIGHT</span><b>is yours to protect.</b></div></div>
+    </section>
+
+    <section class="screen level-screen" id="levelScreen"><div class="modal-card"><div class="eyebrow"><span></span> A NEW POWER AWAKENS</div><h2>Choose your <em>fate.</em></h2><p class="modal-sub">Your magic grows stronger. Pick one gift.</p><div id="upgradeChoices" class="upgrade-choices"></div><div class="level-foot">PRESS <b>1</b>, <b>2</b> OR <b>3</b> TO CHOOSE</div></div></section>
+    <section class="screen pause-screen" id="pauseScreen"><div class="modal-card compact"><div class="eyebrow"><span></span> THE NIGHT CAN WAIT</div><h2>Take a <em>breath.</em></h2><p class="modal-sub">Your coven is holding the line.</p><button id="resumeBtn" class="primary-btn">BACK TO THE GARDEN <span>↗</span></button><button id="restartPause" class="text-btn">START A NEW NIGHT</button></div></section>
+    <section class="screen result-screen" id="resultScreen"><div class="modal-card compact"><div id="resultEyebrow" class="eyebrow"><span></span> THE NIGHT IS OVER</div><h2 id="resultTitle">Dawn <em>breaks.</em></h2><p id="resultCopy" class="modal-sub">The garden is quiet once more.</p><div class="result-stats"><div><b id="finalTime">00:00</b><small>TIME SURVIVED</small></div><div><b id="finalKills">0</b><small>SHADOWS BANISHED</small></div><div><b id="finalLevel">1</b><small>FINAL LEVEL</small></div></div><button id="againBtn" class="primary-btn">PLAY AGAIN <span>↗</span></button></div></section>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
